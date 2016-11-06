@@ -63,9 +63,7 @@ export function strDiff(source, target){
     if(  s !== t && match ){
       //this is the first mismatch in the sequance.
       match = false;
-      //mapSource[s] = indexSource;
       addToMap(s,mapSource,indexSource);
-      //mapTarget[t] = indexTarget;
       addToMap(t,mapTarget,indexTarget);
       mismatchTargetIndex = indexTarget;
       mismatchSourceIndex = indexSource;
@@ -75,7 +73,6 @@ export function strDiff(source, target){
         addAction(actions,noChangeBuffer);
         noChangeBuffer = '';
       }
-
       continue;
     }
 
@@ -88,10 +85,8 @@ export function strDiff(source, target){
         //checking to see if we have something to delete
         if( mapSource[t] > mismatchSourceIndex ){
           addAction(actions,A.substring(mismatchSourceIndex,mapSource[t]),"delete")
-          //actions.push([mismatchSourceIndex,mapSource[t]-mismatchSourceIndex]);
         }
         addAction(actions,B.substring(mismatchTargetIndex,indexTarget),"add");
-        //actions.push([mismatchSourceIndex,B.substring(mismatchTargetIndex,indexTarget)]);
         match = true;
         noChangeBuffer += t;
         indexSource = mapSource[t]+1;
@@ -104,10 +99,8 @@ export function strDiff(source, target){
       }
 
       if( typeof mapTarget[s] === 'number' ){
-        //actions.push([mismatchSourceIndex,indexSource-mismatchSourceIndex]);
         addAction(actions,A.substring(mismatchSourceIndex,indexSource),"delete");
         if( mapTarget[s] > mismatchTargetIndex ){
-          //actions.push([mismatchSourceIndex,B.substring(mismatchTargetIndex,mapTarget[s])]);
           addAction(actions,B.substring(mismatchTargetIndex,mapTarget[s]),"add");
         }
 
@@ -125,8 +118,6 @@ export function strDiff(source, target){
       if( s === t ){
         addAction(actions,B.substring(mismatchTargetIndex,indexTarget),"add");
         addAction(actions,A.substring(mismatchSourceIndex,indexSource),"delete");
-        //actions.push([mismatchSourceIndex,B.substring(mismatchTargetIndex,indexTarget)]);
-        //actions.push([mismatchSourceIndex,indexSource-mismatchSourceIndex]);
         match = true;
         indexTarget = increaseIndex(indexTarget, lenTarget);
         indexSource = increaseIndex(indexSource, lenSource);
@@ -155,8 +146,6 @@ export function strDiff(source, target){
       if( lastIndexSource === indexSource && lastIndexTarget === indexTarget ){
         addAction(actions,B.substring(mismatchTargetIndex,indexTarget),"add");
         addAction(actions,mismatchSourceIndex,A.substring(mismatchSourceIndex,indexSource),"delete");
-        //actions.push([mismatchSourceIndex,B.substring(mismatchTargetIndex,indexTarget)]);
-        //actions.push([mismatchSourceIndex,indexSource-mismatchSourceIndex]);
         match = true;
         indexTarget = mismatchTargetIndex+1;
         indexSource = mismatchSourceIndex+1;
@@ -178,29 +167,20 @@ export function strDiff(source, target){
 
   if( indexTarget < lenTarget ){
     if( mismatchSourceIndex === -1 ){
-      //actions.push([lenSource, B.substring(indexTarget)]);
       addAction(actions,B.substring(indexTarget),"add");
     }
     else{
-      //actions.push([mismatchSourceIndex,(lenSource-mismatchSourceIndex)]);
-      //actions.push([mismatchSourceIndex,B.substring(mismatchTargetIndex)]);
       addAction(actions,A.substring(mismatchSourceIndex),"delete");
       addAction(actions,B.substring(mismatchTargetIndex),"add");
     }
-
   }
 
   if( indexSource < lenSource  ){
     //we delete all the rest of the source
-
-
     if( mismatchSourceIndex === -1 ){
-      //actions.push([indexSource,lenSource-indexSource]);
       addAction(actions,A.substring(indexSource),"delete");
     }
     else{
-      //actions.push([mismatchSourceIndex,lenSource-mismatchSourceIndex]);
-      //actions.push([mismatchSourceIndex,B.substring(mismatchTargetIndex) ]);
       addAction(actions,A.substring(mismatchSourceIndex),"delete");
       addAction(actions,B.substring(mismatchTargetIndex),"add");
     }
@@ -208,8 +188,6 @@ export function strDiff(source, target){
 
   if( indexTarget === lenTarget && indexSource === lenSource && mismatchSourceIndex !== -1 ){
     //in this case we got to the end in the same indexes and we still have a mismatch
-    //actions.push([mismatchSourceIndex,lenSource-mismatchSourceIndex]);
-    //actions.push([mismatchSourceIndex,B.substring(mismatchTargetIndex) ]);
     addAction(actions,A.substring(mismatchSourceIndex),"delete");
     addAction(actions,B.substring(mismatchTargetIndex),"add");
   }
