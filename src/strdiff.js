@@ -119,6 +119,7 @@ export function strDiff(source, target){
         addAction(actions,B.substring(mismatchTargetIndex,indexTarget),"add");
         addAction(actions,A.substring(mismatchSourceIndex,indexSource),"delete");
         match = true;
+        noChangeBuffer += t;
         indexTarget = increaseIndex(indexTarget, lenTarget);
         indexSource = increaseIndex(indexSource, lenSource);
         mapSource = {};
